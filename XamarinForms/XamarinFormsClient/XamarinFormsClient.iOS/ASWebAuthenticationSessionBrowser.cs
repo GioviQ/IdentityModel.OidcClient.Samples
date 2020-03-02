@@ -1,10 +1,10 @@
-﻿using Foundation;
-using System.Threading.Tasks;
+﻿using AuthenticationServices;
+using Foundation;
 using IdentityModel.OidcClient.Browser;
-using SafariServices;
-using System.Diagnostics;
-using AuthenticationServices;
 using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using UIKit;
 
 namespace XamarinFormsClient.iOS
@@ -18,7 +18,7 @@ namespace XamarinFormsClient.iOS
             Debug.WriteLine("ctor");
         }
 
-        public Task<BrowserResult> InvokeAsync(BrowserOptions options)
+        public Task<BrowserResult> InvokeAsync(BrowserOptions options, CancellationToken cancellationToken = default)
         {
             var tcs = new TaskCompletionSource<BrowserResult>();
 

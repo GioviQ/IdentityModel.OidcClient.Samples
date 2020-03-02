@@ -2,19 +2,16 @@
 using IdentityModel.OidcClient.Browser;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text;
-using System.Threading.Tasks;
 
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace XamarinFormsClient.Core
 {
-	//[XamlCompilation(XamlCompilationOptions.Skip)]
-	public partial class MainPage : ContentPage
+    //[XamlCompilation(XamlCompilationOptions.Skip)]
+    public partial class MainPage : ContentPage
     {
         OidcClient _client;
         LoginResult _result;
@@ -33,7 +30,7 @@ namespace XamarinFormsClient.Core
             var options = new OidcClientOptions
             {
                 Authority = "https://demo.identityserver.io",
-                ClientId = "native.hybrid",
+                ClientId = "interactive.public",
                 Scope = "openid profile email api offline_access",
                 RedirectUri = "xamarinformsclients://callback",
                 Browser = browser,
@@ -42,6 +39,7 @@ namespace XamarinFormsClient.Core
             };
 
             _client = new OidcClient(options);
+            _apiClient.Value.BaseAddress = new Uri("https://demo.identityserver.io/");
         }
 
         private async void Login_Clicked(object sender, EventArgs e)
@@ -65,9 +63,7 @@ namespace XamarinFormsClient.Core
 
             OutputText.Text = sb.ToString();
 
-            _apiClient.Value.SetBearerToken(_result?.AccessToken ?? "");
-            _apiClient.Value.BaseAddress = new Uri("https://demo.identityserver.io/");
-
+            _apiClient.Value.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _result?.AccessToken ?? "");
         }
 
         private async void CallApi_Clicked(object sender, EventArgs e)
